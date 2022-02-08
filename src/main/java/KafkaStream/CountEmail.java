@@ -5,8 +5,7 @@ import org.apache.kafka.streams.KafkaStreams;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
-import org.apache.kafka.streams.kstream.KStream;
-import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.kstream.*;
 
 import java.util.Arrays;
 import java.util.Properties;
@@ -23,7 +22,7 @@ public class CountEmail {
         StreamsBuilder builder= new StreamsBuilder();
         KStream<String,String> source = builder.stream("source-topic");
 
-        source.mapValues(v->v.toUpperCase())
+        /*source.mapValues(v->v.toUpperCase())
                 .flatMapValues(v-> Arrays.asList((v.split(" "))))
                 //.selectKey((k,v)->v)
                 // .groupByKey()
@@ -31,17 +30,18 @@ public class CountEmail {
                 //.count(Materialized.with(Serdes.String(),Serdes.Long()))
                 .count(Materialized.as("Count-store-isga"))
                 .toStream()
-                .to("out-topic2");
+                .to("out-source");*/
 
-        /*KStream<String,String> ks0=source.mapValues(value->value.toUpperCase());
-        KStream ks1=ks0.flatMapValues(value-> Arrays.asList((value.split(" "))));
+        KStream<String,String> ks0=source.mapValues(value->value.toUpperCase());
+        KStream ks1=ks0.flatMapValues(value-> Arrays.asList((value.split("\t"))));
         ks1.print(Printed.<String,String>toSysOut().withLabel("KS_SPLIT ---- "));
         KStream ks2=ks1.selectKey((key,value)->value);
+        //ks2 = ks2.filter((key,value)->value.contains());
         ks2.print(Printed.<String,String>toSysOut().withLabel("KS_NEW_KEY ---- "));
         KGroupedStream<String,String> ks3=ks2.groupByKey();
         KTable<String,Long> kt1=ks3.count(Materialized.with(Serdes.String(),Serdes.Long()));
         kt1.toStream().print(Printed.<String,Long>toSysOut().withLabel("KT_COUNT ---- "));
-        System.out.println("----------- AFFICHAGE KSTREAMS ET KTABLE");*/
+        System.out.println("----------- AFFICHAGE KSTREAMS ET KTABLE");
 
         Topology topology = builder.build();
         System.out.println(topology.describe());

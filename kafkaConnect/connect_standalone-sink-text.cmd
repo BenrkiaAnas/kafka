@@ -1,0 +1,1 @@
+c:\kafka\bin\windows\connect-standalone.bat c:\kafka\config\connect-standalone-sink.properties c:\kafka\config\connect-file-sink.properties

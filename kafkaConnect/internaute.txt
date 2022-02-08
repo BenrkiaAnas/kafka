@@ -1,0 +1,6 @@
+Login	Sexe	Email
+user1	M	user1@gmail.com
+user2	F	user2@gmail.com
+user3	M	user3@yahoo.fr
+user4	M	user4@hotmail.com
+user5	M	user5@gmail.com
